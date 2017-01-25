@@ -1,0 +1,26 @@
+{
+    "name" : "olix/import-flux-bundle",
+    "description" : "Symfony OlixImportFluxBundle for import flux of retailers",
+    "type" : "symfony-bundle",
+    "homepage" : "https://github.com/sabinus52/OlixImportFluxBundle",
+    "license" : "GPL-2.0",
+    "authors" : [{
+            "name" : "Olivier",
+            "email" : "sabinus52@gmail.com"
+        }
+    ],
+    "keywords" : [
+        "olix",
+        "symfony",
+        "import",
+        "flux"
+    ],
+    "require": {
+        "symfony/symfony": "~2.8"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Olix\\ImportFluxBundle\\" : ""
+        }
+    }
+}
