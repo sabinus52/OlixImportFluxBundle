@@ -1,0 +1,15 @@
+# Gestion des partenaires
+olix_importflux_partner_list:
+    pattern:  /partenaire
+    defaults: { _controller: "OlixImportFluxBundle:Partner:index" }
+olix_importflux_partner_results:
+    pattern:  /partenaire/results
+    defaults: { _controller: "OlixImportFluxBundle:Partner:getResults" }
+olix_importflux_partner_create:
+    pattern:  /partenaire/create
+    defaults: { _controller: "OlixImportFluxBundle:Partner:create" }
+olix_importflux_partner_edit:
+    pattern:  /partenaire/{id}/edit
+    defaults: { _controller: "OlixImportFluxBundle:Partner:edit" }
+    options:
+        expose: true

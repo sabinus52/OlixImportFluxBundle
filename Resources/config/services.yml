@@ -1,1 +1,4 @@
 services:
+    admin_datatables.partner:
+        class: Olix\ImportFluxBundle\Datatables\PartnerDatatable
+        parent: sg_datatables.datatable.abstract

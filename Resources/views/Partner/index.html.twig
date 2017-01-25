@@ -1,0 +1,54 @@
+{% extends 'OlixAdminBundle::layout.html.twig' %}
+
+{% block header2 %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-sm-12">{% include 'OlixAdminBundle::include/flashbag.html.twig' %}</div>
+
+        <div class="col-sm-12">
+            <div class="olix-portlet olix-portlet-border">
+                <div class="olix-portlet-header">
+                    <div class="icon"><i class="fa fa-list"></i></div>
+                    <div class="title">Liste des partenaires</div>
+                    <div class="toolbar">
+                        <a href="{{ path('olix_importflux_partner_create') }}" title="Ajouter un nouveau partenaire" class="btn btn-success"><i class="fa fa-plus"></i> Ajouter</a>
+                        <a class="btn btn-default btn-filter" role="button" data-toggle="collapse" href="#olix_importflux_partner_datatable_filtering" aria-expanded="true" aria-controls="olix_importflux_partner_datatable_filtering"><i class="fa fa-filter"></i> Filtrer</a> 
+                    </div>
+                </div>
+                {{ datatable_render_html(datatable) }}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block stylesheet %}
+{{ parent() }}
+{% include 'OlixDatatablesBootstrapBundle::stylesheet.html.twig' %}
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+{% include 'OlixDatatablesBootstrapBundle::javascript.html.twig' %}
+{{ datatable_render_js(datatable) }}
+
+<script type="text/javascript">
+
+var rubric = {{ rubric|json_encode|raw }};
+
+function render_column_rubric(data, type, row, meta) {
+    return '<span class="label label-'+rubric[data].color+'">'+rubric[data].label+'<span>';
+}
+
+function render_column_priority(data, type, row, meta) {
+    return '<span class="badge badge-default">'+data+'</span>';
+}
+
+
+</script>
+{% endblock %}
+

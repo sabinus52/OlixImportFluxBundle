@@ -1,0 +1,57 @@
+{% extends 'BackAdminBundle::layout.html.twig' %}
+
+{% block header2 %}{% endblock %}
+
+{% block content %}
+
+    <div class="col-sm-12">{{ form_errors(form) }}</div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="olix-portlet olix-portlet-border">
+                <div class="olix-portlet-header">
+                    <div class="icon"><i class="fa fa-edit"></i></div>
+                    <div class="title">Formulaire de saisie d'un partenaire</div>
+                </div>
+                <div class="olix-portlet-body">
+                    <form method="post" novalidate="novalidate" class="form-horizontal" {{ form_enctype(form) }}>
+                        <h4>Informations générales</h4>
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.rubric) }}
+                        {{ form_row(form.active) }}
+                        {{ form_row(form.priority) }}
+                        <hr>
+                        <h4>Paramètres pour le développement</h4>
+                        {{ form_row(form.code) }}
+                        {{ form_row(form.className) }}
+                        <hr>
+                        <h4>Paramètres de téléchargement</h4>
+                        {{ form_rest(form) }}
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                                <a href="{{ path('olix_importflux_partner_list') }}" class="btn btn-default">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block stylesheet %}
+{{ parent() }}
+{% include 'OlixFormsExtBootstrapBundle::stylesheet.html.twig' %}
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+{% include 'OlixFormsExtBootstrapBundle::javascript.html.twig' %}
+{{ form_javascript(form) }}
+{% endblock %}
