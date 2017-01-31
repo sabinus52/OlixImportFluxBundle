@@ -31,6 +31,25 @@ abstract class Partner implements PartnerInterface
     const FLUX_TYPE_CSV = 'CSV';
 
 
+    const STATUS_NULL   = 0;
+    const STATUS_OK     = 1;
+    const STATUS_WAIT   = 3;
+    const STATUS_ERROR  = 9;
+
+
+    /**
+     * Liste des statuts
+     * @var array
+     */
+    static private $states = array (
+        self::STATUS_NULL   => array('code' => '-',     'color' => 'default',   'label' => '--'),
+        self::STATUS_OK     => array('code' => 'OK',    'color' => 'success',   'label' => 'OK'),
+        self::STATUS_WAIT   => array('code' => 'WAIT',  'color' => 'warning',   'label' => 'WAITING'),
+        self::STATUS_ERROR  => array('code' => 'ERROR', 'color' => 'danger',    'label' => 'ERROR'),
+    );
+
+
+
     /**
      * @var int
      *
@@ -132,6 +151,54 @@ abstract class Partner implements PartnerInterface
      */
     private $fluxType;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="do_status", type="smallint", options={"default" : 0})
+     */
+    private $doStatus;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="do_date_executed", type="datetime", nullable=true)
+     */
+    private $doExecutedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="do_date_finished", type="datetime", nullable=true)
+     */
+    private $doFinishedAt;
+
+
+
+    /**
+     * Retourne la liste des statuts
+     *
+     * @param string $field : Nom du champs à retourner
+     * @return multitype:string
+     */
+    static public function getStates($field = null)
+    {
+        if (!$field) return self::$states;
+        $result = array();
+        foreach (self::$states as $key => $state) {
+            $result[$key] = $state[$field];
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * Constructeur
+     */
+    public function __construct()
+    {
+        $this->doStatus = self::STATUS_NULL;
+    }
 
 
     /**
@@ -149,7 +216,6 @@ abstract class Partner implements PartnerInterface
      * Set code
      *
      * @param string $code
-     *
      * @return Partner
      */
     public function setCode($code)
@@ -173,7 +239,6 @@ abstract class Partner implements PartnerInterface
      * Set className
      *
      * @param string $className
-     *
      * @return Partner
      */
     public function setClassName($className)
@@ -197,7 +262,6 @@ abstract class Partner implements PartnerInterface
      * Set name
      *
      * @param string $name
-     *
      * @return Partner
      */
     public function setName($name)
@@ -221,7 +285,6 @@ abstract class Partner implements PartnerInterface
      * Set rubric
      *
      * @param integer $rubric
-     *
      * @return Partner
      */
     public function setRubric($rubric)
@@ -245,7 +308,6 @@ abstract class Partner implements PartnerInterface
      * Set active
      *
      * @param boolean $active
-     *
      * @return Partner
      */
     public function setActive($active)
@@ -269,7 +331,6 @@ abstract class Partner implements PartnerInterface
      * Set priority
      *
      * @param integer $priority
-     *
      * @return Partner
      */
     public function setPriority($priority)
@@ -292,7 +353,6 @@ abstract class Partner implements PartnerInterface
      * Set fluxUrl
      *
      * @param string $fluxUrl
-     *
      * @return Partner
      */
     public function setFluxUrl($fluxUrl)
@@ -315,7 +375,6 @@ abstract class Partner implements PartnerInterface
      * Set fluxUrlUser
      *
      * @param string $fluxUrlUser
-     *
      * @return Partner
      */
     public function setFluxUrlUser($fluxUrlUser)
@@ -338,7 +397,6 @@ abstract class Partner implements PartnerInterface
      * Set fluxUrlPass
      *
      * @param string $fluxUrlPass
-     *
      * @return Partner
      */
     public function setFluxUrlPass($fluxUrlPass)
@@ -361,7 +419,6 @@ abstract class Partner implements PartnerInterface
      * Set fluxCompressed
      *
      * @param boolean $fluxCompressed
-     *
      * @return Partner
      */
     public function setFluxCompressed($fluxCompressed)
@@ -384,7 +441,6 @@ abstract class Partner implements PartnerInterface
      * Set fluxType
      *
      * @param string $fluxType
-     *
      * @return Partner
      */
     public function setFluxType($fluxType)
@@ -401,6 +457,83 @@ abstract class Partner implements PartnerInterface
     public function getFluxType()
     {
         return $this->fluxType;
+    }
+
+
+    /**
+     * Set doStatus
+     *
+     * @param integer $doStatus
+     * @return Partner
+     */
+    public function setDoStatus($doStatus)
+    {
+        $this->doStatus = $doStatus;
+        return $this;
+    }
+
+    /**
+     * Get doStatus
+     *
+     * @return integer
+     */
+    public function getDoStatus()
+    {
+        return $this->doStatus;
+    }
+    public function getDoStatusLabel()
+    {
+        return self::$states[$this->doStatus]['label'];
+    }
+    public function getDoStatusColor()
+    {
+        return self::$states[$this->doStatus]['color'];
+    }
+
+
+    /**
+     * Set doExecutedAt
+     *
+     * @param \DateTime $doExecutedAt
+     * @return Partner
+     */
+    public function setDoExecutedAt($doExecutedAt)
+    {
+        $this->doExecutedAt = $doExecutedAt;
+        return $this;
+    }
+
+    /**
+     * Get doExecutedAt
+     *
+     * @return \DateTime
+     */
+    public function getDoExecutedAt()
+    {
+        return $this->doExecutedAt;
+    }
+
+
+    /**
+     * Set doFinishedAt
+     *
+     * @param \DateTime $doFinishedAt
+     * @return Partner
+     */
+    public function setDoFinishedAt($doFinishedAt)
+    {
+        $this->doFinishedAt = $doFinishedAt;
+        return $this;
+    }
+
+    /**
+     * Get doFinishedAt
+     *
+     * @return \DateTime
+     */
+    public function getDoFinishedAt()
+    {
+        return $this->doFinishedAt;
     }
 
 }

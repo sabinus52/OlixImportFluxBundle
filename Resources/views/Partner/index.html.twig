@@ -39,6 +39,7 @@
 <script type="text/javascript">
 
 var rubric = {{ rubric|json_encode|raw }};
+var states = {{ states|json_encode|raw }};
 
 function render_column_rubric(data, type, row, meta) {
     return '<span class="label label-'+rubric[data].color+'">'+rubric[data].label+'<span>';
@@ -48,6 +49,9 @@ function render_column_priority(data, type, row, meta) {
     return '<span class="badge badge-default">'+data+'</span>';
 }
 
+function render_column_state(data, type, row, meta) {
+    return '<span class="label label-'+states[data].color+'">'+states[data].label+'</span>';
+}
 
 </script>
 {% endblock %}

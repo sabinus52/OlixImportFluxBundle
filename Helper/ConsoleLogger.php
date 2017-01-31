@@ -1,27 +1,53 @@
 <?php
-namespace Olix\ImportFluxBundle\Model;
+/**
+ * Classe des logs de la console
+ *
+ * @author Olivier <sabinus52@gmail.com>
+ *
+ * @package Olix
+ * @subpackage ImportFluxBundle
+ */
 
+namespace Olix\ImportFluxBundle\Helper;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Psr\Log\LogLevel;
 
-class ReportFlux
-{
-    protected $output;
 
+
+class ConsoleLogger
+{
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var ConsoleLogger
+     */
     protected $logger;
 
-    protected $file;
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
 
-    public function __construct(OutputInterface $output)
+
+    /**
+     * Constructeur
+     *
+     * @param OutputInterface $output
+     */
+    public function __construct(ContainerInterface $container, OutputInterface $output)
     {
-        $output->getFormatter()->setStyle('debug', new OutputFormatterStyle('cyan'));
-        $output->getFormatter()->setStyle('warning', new OutputFormatterStyle('white', 'yellow'));
-        $output->getFormatter()->setStyle('info', new OutputFormatterStyle('blue', null, array('bold')));
-
         $this->output = $output;
-        $this->logger = new ConsoleLogger($output, array(), array(
+        $this->container = $container;
+
+        $this->setStyleFormatter();
+        $this->logger = new \Symfony\Component\Console\Logger\ConsoleLogger($output, array(), array(
             LogLevel::EMERGENCY => 'error',
             LogLevel::ALERT => 'error',
             LogLevel::CRITICAL => 'error',
@@ -33,20 +59,57 @@ class ReportFlux
         ));
     }
 
+
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
     public function getOutputInterface()
     {
         return $this->output;
     }
 
-    public function printInfo($message, $info)
+
+    /**
+     * Affecte les différents styles
+     */
+    protected function setStyleFormatter()
     {
-        $this->output->writeln($message.' : <info>'.$info.'</info>');
+        $this->output->getFormatter()->setStyle('debug', new OutputFormatterStyle('cyan'));
+        $this->output->getFormatter()->setStyle('warning', new OutputFormatterStyle('white', 'yellow'));
+
+        $this->output->getFormatter()->setStyle('info', new OutputFormatterStyle('blue', null, array('bold')));
+        $this->output->getFormatter()->setStyle('success', new OutputFormatterStyle('green', null, array('bold')));
+        $this->output->getFormatter()->setStyle('danger', new OutputFormatterStyle('red', null, array('bold')));
     }
 
-    public function writeln($messages)
+
+    /**
+     * Envoi d'un mail en cas d'erreur
+     *
+     * @param string $message
+     */
+    public function sendMailError($message)
     {
-        $this->output->writeln($messages);
+        $mail = \Swift_Message::newInstance()
+            ->setSubject('Une erreur est survenue lors de l\'import du partenaire')
+            ->setFrom($this->container->getParameter('mailer_sendfrom'))
+            ->setTo($this->container->getParameter('mailer_senderror'))
+            ->setBody($message);
+
+        $this->container->get('mailer')->send($mail);
     }
+
+
+    /**
+     * Affiche un message quelconque
+     *
+     * @param string $message
+     */
+    public function writeln($message)
+    {
+        $this->output->writeln($message);
+    }
+
 
     /**
      * System is unusable.
@@ -73,6 +136,7 @@ class ReportFlux
     public function alert($message, array $context = array())
     {
         $this->logger->alert($message, $context);
+        $this->sendMailError($message);
     }
 
     /**

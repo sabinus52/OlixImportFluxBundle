@@ -55,6 +55,22 @@ class PartnerDatatable extends AbstractDatatableView
                 'title' => '#',
                 'searchable' => false,
             ))
+            ->add('doStatus', 'column', array(
+                'title' => 'Statut',
+                'width' => '50px',
+                'searchable' => false,
+                'class' => 'text-center',
+                'filter' => array('text', array(
+                    'class' => 'form-control',
+                )),
+                'render' => 'render_column_state',
+            ))
+            ->add('doExecutedAt', 'datetime', array(
+                'title' => 'Execution',
+                'searchable' => false,
+                'date_format' => 'L LT',
+                'width' => '100px',
+            ))
             ->add('priority', 'column', array(
                 'title' => 'Priorité',
                 'width' => '50px',

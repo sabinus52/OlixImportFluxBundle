@@ -41,6 +41,7 @@ class PartnerController extends Controller
         return $this->container->get('olix.admin')->render('OlixImportFluxBundle:Partner:index.html.twig', 'importflux_partner', array(
             'datatable'     => $datatable,
             'rubric'        => call_user_func(array($this->getClassPartner(), 'getRubrics')),
+            'states'        => call_user_func(array($this->getClassPartner(), 'getStates')),
         ));
     }
 

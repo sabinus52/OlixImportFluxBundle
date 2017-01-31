@@ -2,3 +2,8 @@ services:
     admin_datatables.partner:
         class: Olix\ImportFluxBundle\Datatables\PartnerDatatable
         parent: sg_datatables.datatable.abstract
+    importflux.listener.command_exception:
+        class: Olix\ImportFluxBundle\Listener\ConsoleExceptionListener
+        arguments: [ '@service_container', '@logger']
+        tags:
+            - { name: kernel.event_listener, event: console.exception }
