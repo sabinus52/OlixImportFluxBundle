@@ -230,9 +230,10 @@ abstract class ImportFlux
     /**
      * Chargement du flux
      *
+     * @param string $method : Methode d'ouverture du fichier
      * @throws \Exception
      */
-    public function loadFile()
+    public function loadFile($method = 'SimpleXMLElement')
     {
         if (!is_readable($this->getFileNameFlux())) {
             $this->report->error('Le fichier '.$this->getFileNameFlux().' est absent');
@@ -241,7 +242,7 @@ abstract class ImportFlux
         }
         switch ($this->partner->getFluxType()) {
             case Partner::FLUX_TYPE_XML:
-                return $this->loadFileXML();
+                return $this->loadFileXML($method);
                 break;
             case Partner::FLUX_TYPE_CSV:
                 return $this->loadFileCSV();
@@ -256,12 +257,31 @@ abstract class ImportFlux
     /**
      * Chargement d'un flux au format XML
      *
-     * @return \SimpleXMLElement
+     * @param string $method : Methode d'ouverture du fichier
+     * @return \SimpleXMLElement|XMLReader
      */
-    protected function loadFileXML()
+    protected function loadFileXML($method)
     {
-        $xml = simplexml_load_file($this->getFileNameFlux());
+        switch ($method) {
+            case 'SimpleXMLElement' :
+                $xml = new \SimpleXMLElement($this->getFileNameFlux(), 0, true);
+                $result = ($xml) ? true : false;
+                break;
+            case 'XMLReader' :
+                $xml = new \XMLReader();
+                $result = $xml->open($this->getFileNameFlux());
+                break;
+            default :
+                throw new \Exception('La méthode "'.$$method.'" d\'ouverture XML est inconnu : attendu (SimpleXMLElement, XMLReader)');
+        }
         $this->logger->notice('Nom du fichier XML téléchargé = '.$this->filenameFlux);
+
+        // Retour si erreur
+        if (!$result) {
+            $this->report->error('Impossible de lire le fichier '.$this->getFileNameFlux().'');
+            $this->setError();
+            return false;
+        }
         return $xml;
     }
 
