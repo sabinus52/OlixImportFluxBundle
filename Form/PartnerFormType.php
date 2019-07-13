@@ -53,6 +53,9 @@ class PartnerFormType extends AbstractType
             ->add('name', 'text', array(
                 'label' => 'Nom du partenaire',
             ))
+            ->add('version', 'integer', array(
+                'label' => 'Version',
+            ))
             ->add('rubric', 'choice', array(
                 'label' => 'Rubrique',
                 'choices' => call_user_func_array($this->classPartner.'::getRubrics', array('label')),

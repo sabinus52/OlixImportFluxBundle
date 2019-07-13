@@ -84,6 +84,18 @@ abstract class Partner implements PartnerInterface
     private $className;
 
     /**
+     * Version du flux
+     * 
+     * @var integer
+     * 
+     * @ORM\Column(name="version", type="smallint", options={"default" : 1})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="integer")
+     * @Assert\GreaterThan(0)
+     */
+    private $version;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50)
@@ -255,6 +267,29 @@ abstract class Partner implements PartnerInterface
     public function getClassName()
     {
         return $this->className;
+    }
+
+
+    /**
+     * Set version
+     *
+     * @param string $version
+     * @return Partner
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
 

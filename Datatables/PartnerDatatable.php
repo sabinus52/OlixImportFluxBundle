@@ -85,6 +85,12 @@ class PartnerDatatable extends AbstractDatatableView
                     'class' => 'form-control',
                 )),
             ))
+            ->add('version', 'column', array(
+                'title' => 'Version',
+                'searchable' => false,
+                'width' => '50px',
+                'render' => 'render_column_version',
+            ))
             ->add('name', 'column', array(
                 'title' => 'Nom',
                 'filter' => array('text', array(
