@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Partner
  *
  * @ORM\MappedSuperclass
- * @UniqueEntity(fields="code", message="Ce code est déjà utilisé, merci d'en choisir un autre")
+ * @UniqueEntity(fields={"code", "version", "rubric"}, message="Ce code est déjà utilisé, merci d'en choisir un autre")
  */
 abstract class Partner implements PartnerInterface
 {
@@ -64,7 +64,7 @@ abstract class Partner implements PartnerInterface
      *
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=20, unique=true)
+     * @ORM\Column(name="code", type="string", length=20)
      * @Assert\NotBlank()
      * @Assert\Regex(pattern="/^[a-z][a-z\-0-9]*$/", message="Le code doit comporter que des lettres ou chiffres en minuscules")
      * @Assert\Length(min=2,max=20)
